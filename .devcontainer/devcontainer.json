@@ -1,6 +1,7 @@
 {
   "name": "GigaBrowse 10Gbps Engine",
   "image": "lscr.io/linuxserver/chromium:latest",
+  "overrideCommand": false,
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
@@ -8,7 +9,11 @@
       "onAutoForward": "openBrowser"
     }
   },
+  "runArgs": ["--shm-size=2gb"],
   "containerEnv": {
+    "PUID": "1000",
+    "PGID": "1000",
+    "TZ": "America/Chicago",
     "TITLE": "GigaBrowse 10Gbps",
     "CHROME_CLI": "https://www.fast.com"
   }
