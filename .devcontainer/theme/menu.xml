@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GigaBrowse v2 — Openbox right-click (root) menu.
+     Every entry just (re)opens something in the cloud Chrome — nothing here
+     can break the desktop. "Downloads" opens the local download folder in
+     Chrome so you can see what is queued before it reaches Drive. -->
+<openbox_menu xmlns="http://openbox.org/3.4/menu">
+  <menu id="root-menu" label="GIGABROWSE">
+    <item label="GigaBrowse Start Page">
+      <action name="Execute">
+        <command>google-chrome-stable http://localhost:8080/</command>
+      </action>
+    </item>
+    <item label="Speed Test — fast.com">
+      <action name="Execute">
+        <command>google-chrome-stable https://www.fast.com</command>
+      </action>
+    </item>
+    <item label="Speed Test — speedtest.net">
+      <action name="Execute">
+        <command>google-chrome-stable https://www.speedtest.net</command>
+      </action>
+    </item>
+    <separator/>
+    <item label="Downloads (local queue)">
+      <action name="Execute">
+        <command>google-chrome-stable file:///config/Downloads</command>
+      </action>
+    </item>
+    <item label="Google Drive (web)">
+      <action name="Execute">
+        <command>google-chrome-stable https://drive.google.com/drive/my-drive</command>
+      </action>
+    </item>
+    <separator/>
+    <item label="Re-launch Chrome">
+      <action name="Execute">
+        <command>google-chrome-stable http://localhost:8080/</command>
+      </action>
+    </item>
+  </menu>
+</openbox_menu>

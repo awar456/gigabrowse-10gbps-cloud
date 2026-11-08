@@ -1,0 +1,65 @@
+# GigaBrowse v2 — Openbox autostart.
+# The LSIO init copies this file to /config/.config/openbox/autostart on
+# first run. It runs once per desktop session, as user abc.
+
+# --- Desktop look: gold-on-black wallpaper (feh), solid near-black fallback.
+if command -v feh >/dev/null 2>&1 && [ -f /config/theme/wallpaper.jpg ]; then
+  feh --bg-fill /config/theme/wallpaper.jpg &
+else
+  xsetroot -solid "#0B0F14" &
+fi
+
+# --- Wait for the start-page server (s6 service giga-www, :8080) so the
+# first paint is the branded start page, not a connection error.
+for i in $(seq 1 30); do
+  curl -sf http://127.0.0.1:8080/ >/dev/null 2>&1 && break
+  sleep 1
+done
+
+# --- Google Chrome, tuned for a streamed cloud desktop.
+#   --user-data-dir=/config/chrome-profile : profile persists in /config
+#   --start-maximized --window-size=1280,720 : fills the fixed desktop exactly
+#   --force-device-scale-factor=1           : crisp 1:1 rendering, no blurry scaling
+#   --no-sandbox                            : containerized Chrome (container is the sandbox)
+#   --disable-gpu --disable-dev-shm-usage   : no GPU in a Codespace; temp files to /tmp
+#   --no-first-run --no-default-browser-check --disable-session-crashed-bubble --noerrdialogs
+#                                             : no first-run / crash-restore interruptions
+#   --disable-features=Translate,MediaRouter: no Translate bar, no Cast noise
+#   --enable-features=WebUIDarkMode --force-dark-mode
+#                                             : dark Chrome UI + dark WebUI pages
+#   --hide-scrollbars                       : no scrollbars inside pages (the #1 complaint)
+#   --password-store=basic                  : no keyring prompts in the container
+#   --disable-background-*                  : background tabs stay live (no throttling)
+#   --disable-component-update --disable-sync --disable-breakpad
+#                                             : no background updater/sync/crash uploads
+#   --mute-audio                            : no audio stream needed (saves CPU/bandwidth)
+#   --js-flags=--max-old-space-size=4096    : renderer heap cap (16 GB machine)
+#   --disk-cache-size=1073741824            : 1 GB disk cache
+google-chrome-stable \
+  --user-data-dir=/config/chrome-profile \
+  --start-maximized \
+  --window-size=1280,720 \
+  --force-device-scale-factor=1 \
+  --no-sandbox \
+  --disable-gpu \
+  --disable-dev-shm-usage \
+  --no-first-run \
+  --no-default-browser-check \
+  --disable-session-crashed-bubble \
+  --noerrdialogs \
+  --disable-features=Translate,MediaRouter \
+  --enable-features=WebUIDarkMode \
+  --force-dark-mode \
+  --hide-scrollbars \
+  --password-store=basic \
+  --disable-background-networking \
+  --disable-background-timer-throttling \
+  --disable-renderer-backgrounding \
+  --disable-backgrounding-occluded-windows \
+  --disable-component-update \
+  --disable-sync \
+  --disable-breakpad \
+  --mute-audio \
+  --js-flags=--max-old-space-size=4096 \
+  --disk-cache-size=1073741824 \
+  http://localhost:8080/ &

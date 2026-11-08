@@ -1,0 +1,5 @@
+#!/command/with-contenv bash
+# GigaBrowse v2 — start-page HTTP server (s6 service).
+# Serves /config/www (index.html, style.css, wallpaper.jpg, status.json)
+# on 127.0.0.1:8080. Chrome opens http://localhost:8080/ at startup.
+exec python3 -m http.server 8080 --directory /config/www --bind 127.0.0.1

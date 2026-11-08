@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GigaBrowse — 10 Gbps Cloud Browser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="wordmark">GIGABROWSE</div>
+      <div class="tagline">10 Gbps &middot; Cloud Browser &middot; Gold Standard</div>
+      <div class="clock" id="clock">--:--</div>
+      <div class="session">KasmVNC &middot; 1280&times;720 &middot; 4-core Codespace &middot; Dallas &rarr; GitHub datacenter</div>
+    </header>
+
+    <main class="grid">
+      <!-- Speed test -->
+      <section class="card speed">
+        <h2>Speed Test</h2>
+        <p class="muted">Runs in the datacenter — this is the cloud&rsquo;s link, not your home&rsquo;s.</p>
+        <a class="btn gold" href="https://www.fast.com" target="_blank" rel="noopener">Run fast.com</a>
+        <a class="btn ghost" href="https://www.speedtest.net" target="_blank" rel="noopener">speedtest.net</a>
+      </section>
+
+      <!-- Downloads: live status from the watcher -->
+      <section class="card downloads">
+        <h2>Downloads &rarr; Google Drive</h2>
+        <p class="muted">Everything downloaded here is automatically moved to
+        <strong>Drive &rarr; GigaBrowse_Downloads</strong> and shows up on every device.</p>
+        <div id="dl-status" class="dl-status">
+          <div class="dl-line"><span class="dot idle"></span><span>Loading download status&hellip;</span></div>
+        </div>
+        <div id="dl-completed" class="dl-completed"></div>
+        <p class="fineprint" id="dl-note">A 5 GB file takes roughly 1&ndash;3 minutes to appear in Drive:
+        the cloud fetches it at gigaspeed, then pushes it to Drive at gigaspeed.
+        Small files arrive in seconds.</p>
+      </section>
+
+      <!-- Quick links -->
+      <section class="card links">
+        <h2>Go</h2>
+        <div class="link-grid">
+          <a href="https://www.youtube.com" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://mail.google.com" target="_blank" rel="noopener">Gmail</a>
+          <a href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener">Google Drive</a>
+          <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.google.com" target="_blank" rel="noopener">Google</a>
+          <a href="https://www.amazon.com" target="_blank" rel="noopener">Amazon</a>
+        </div>
+      </section>
+
+      <!-- Your Mini: open these on your own device -->
+      <section class="card mini">
+        <h2>Your Mini <span class="pill">open on your device</span></h2>
+        <p class="muted">These links live on your home Mini (Tailscale). They do <em>not</em> load
+        inside the cloud browser — open them in Safari/Chrome on your iPhone or MacBook.</p>
+        <ul class="mini-list">
+          <li><span>Jellyfin</span><code>http://100.75.179.75:8096</code></li>
+          <li><span>Landing page</span><code>http://100.75.179.75</code></li>
+          <li><span>n8n</span><code>http://100.75.179.75:5678</code></li>
+          <li><span>Uptime Kuma</span><code>http://100.75.179.75:3001</code></li>
+          <li><span>Pi-hole</span><code>http://100.75.179.75:8080/admin/</code></li>
+          <li><span>Mini Browser</span><code>http://100.75.179.75:3010</code></li>
+        </ul>
+      </section>
+
+      <!-- Tips -->
+      <section class="card tips">
+        <h2>Make it fast</h2>
+        <ul>
+          <li><strong>Zoom a page:</strong> open the floating keyboard, then <kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>Ctrl</kbd>+<kbd>&minus;</kbd>.</li>
+          <li><strong>Address bar:</strong> <kbd>Ctrl</kbd>+<kbd>L</kbd>, type, Enter.</li>
+          <li><strong>Typing:</strong> tap the floating keyboard button (bottom of the screen) — the iOS keyboard can&rsquo;t appear inside a streamed desktop; this is the trade-off that keeps the gigaspeed.</li>
+          <li><strong>Downloads:</strong> just download normally. The watcher moves finished files to Drive by itself — nothing to do.</li>
+          <li><strong>Full screen:</strong> the KasmVNC menu (left edge) &rarr; Fullscreen.</li>
+        </ul>
+      </section>
+
+      <!-- Honest limits -->
+      <section class="card limits">
+        <h2>What this can&rsquo;t do</h2>
+        <ul>
+          <li>Movies/shows <strong>bought on Apple TV or Amazon Prime</strong> can&rsquo;t be downloaded as playable files — they&rsquo;re DRM-protected streams. Their apps&rsquo; offline downloads are encrypted and locked to the app. Direct file downloads of any size work; DRM streams don&rsquo;t. To truly own a movie: buy the disc and rip it to the Mini/Jellyfin.</li>
+          <li>The native iOS keyboard never appears inside the streamed browser. Floating keyboard instead — by design.</li>
+          <li>Codespaces stop after 30 min idle and 12 h max. The Mini restarts them on demand.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>GigaBrowse v2 &middot; KasmVNC &middot; Chrome &middot; rclone &rarr; Google Drive &middot; 30 free hours/month on GitHub Free</footer>
+  </div>
+
+<script>
+function fmtBytes(n) {
+  if (n == null || isNaN(n)) return "";
+  var u = ["B","KB","MB","GB","TB"], i = 0, v = +n;
+  while (v >= 1024 && i < u.length - 1) { v /= 1024; i++; }
+  return v.toFixed(v >= 100 ? 0 : 1) + " " + u[i];
+}
+function tickClock() {
+  var d = new Date();
+  document.getElementById("clock").textContent =
+    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+}
+function renderStatus(s) {
+  var box = document.getElementById("dl-status");
+  var done = document.getElementById("dl-completed");
+  if (!s) {
+    box.innerHTML = '<div class="dl-line"><span class="dot warn"></span><span>Status unavailable — the download watcher may still be starting.</span></div>';
+    return;
+  }
+  var html = "";
+  if (s.rclone === "missing") {
+    html += '<div class="dl-line"><span class="dot warn"></span><span><strong>Drive not connected yet.</strong> Add the RCLONE_CONF_B64 secret and rebuild — downloads will queue locally until then.</span></div>';
+  }
+  if (s.uploading) {
+    var u = s.uploading;
+    html += '<div class="dl-line"><span class="dot busy"></span><span><strong>Uploading to Drive:</strong> '
+      + u.name + ' (' + fmtBytes(u.size) + ')<br><span class="muted">' + (u.progress || "starting&hellip;") + '</span></span></div>';
+  } else if (s.rclone === "ok") {
+    html += '<div class="dl-line"><span class="dot ok"></span><span>Drive connected — nothing uploading right now.</span></div>';
+  }
+  if (s.pending > 0) {
+    html += '<div class="dl-line"><span class="dot idle"></span><span>' + s.pending + ' file(s) queued in the local download folder.</span></div>';
+  }
+  box.innerHTML = html || '<div class="dl-line"><span class="dot idle"></span><span>No downloads yet.</span></div>';
+
+  if (s.completed && s.completed.length) {
+    var items = s.completed.map(function (c) {
+      return '<li><span>' + c.name + '</span><span class="muted">' + fmtBytes(c.size) + ' &middot; ' + c.finished + '</span></li>';
+    }).join("");
+    done.innerHTML = '<h3>Recently arrived in Drive</h3><ul class="done-list">' + items + '</ul>';
+  } else {
+    done.innerHTML = "";
+  }
+}
+function poll() {
+  fetch("status.json", { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(renderStatus)
+    .catch(function () { renderStatus(null); });
+}
+tickClock();
+setInterval(tickClock, 15000);
+poll();
+setInterval(poll, 3000);
+</script>
+</body>
+</html>

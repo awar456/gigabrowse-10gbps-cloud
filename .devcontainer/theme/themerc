@@ -1,0 +1,59 @@
+# GigaGold — Openbox theme for GigaBrowse v2.
+# Luxury modern minimalist: near-black surfaces, gold accents, white text.
+# Installed to /usr/share/themes/GigaGold/openbox-3/themerc by the Dockerfile;
+# selected by name in rc.xml. All colors are flat (no gradients) so window
+# borders render crisply at any scale over a remote stream.
+
+# --- Window frames ---
+window.active.title.bg.color: #0B0F14
+window.active.label.text.color: #D4AF37
+window.active.button.unpressed.bg.color: #0B0F14
+window.active.button.pressed.bg.color: #1A1F27
+window.active.button.hover.bg.color: #2A2F38
+window.active.button.disabled.bg.color: #0B0F14
+window.active.button.toggled.bg.color: #D4AF37
+window.active.handle.bg.color: #0B0F14
+window.active.grip.bg.color: #0B0F14
+window.active.border.color: #D4AF37
+window.active.client.color: #0B0F14
+
+window.inactive.title.bg.color: #10141A
+window.inactive.label.text.color: #8A8F98
+window.inactive.button.unpressed.bg.color: #10141A
+window.inactive.button.pressed.bg.color: #1A1F27
+window.inactive.button.hover.bg.color: #2A2F38
+window.inactive.button.disabled.bg.color: #10141A
+window.inactive.button.toggled.bg.color: #8A8F98
+window.inactive.handle.bg.color: #10141A
+window.inactive.grip.bg.color: #10141A
+window.inactive.border.color: #2A2F38
+window.inactive.client.color: #10141A
+
+window.label.text.justify: Center
+window.active.label.text.font: sans bold 9
+window.inactive.label.text.font: sans 9
+
+# --- Menus (right-click desktop menu) ---
+menu.title.bg.color: #0B0F14
+menu.title.text.color: #D4AF37
+menu.title.text.justify: Left
+menu.title.text.font: sans bold 9
+menu.items.bg.color: #11151B
+menu.items.text.color: #EDEDEA
+menu.items.disabled.text.color: #5A5F68
+menu.items.active.bg.color: #D4AF37
+menu.items.active.text.color: #0B0F14
+menu.items.text.font: sans 9
+menu.items.active.text.font: sans bold 9
+menu.separator.color: #2A2F38
+menu.border.color: #D4AF37
+menu.border.width: 1
+menu.overlap.x: 0
+menu.overlap.y: 0
+
+# --- On-screen display (volume/brightness popups) ---
+osd.bg.color: #0B0F14
+osd.label.text.color: #D4AF37
+osd.label.text.font: sans bold 10
+osd.border.color: #D4AF37
+osd.border.width: 1

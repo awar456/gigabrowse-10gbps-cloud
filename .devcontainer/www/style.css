@@ -1,0 +1,110 @@
+/* GigaBrowse v2 start page — luxury modern minimalist: black, gold, white.
+   No external fonts or assets (works offline inside the Codespace). */
+:root {
+  --black: #0b0f14;
+  --panel: #11151b;
+  --panel-2: #161b22;
+  --gold: #d4af37;
+  --gold-dim: #9c7f2a;
+  --white: #f2efe9;
+  --muted: #9aa0a8;
+  --line: #2a2f38;
+  --ok: #3fae6a;
+  --warn: #d4af37;
+  --busy: #d4af37;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--black) url("wallpaper.jpg") center / cover fixed no-repeat;
+  color: var(--white);
+  font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.page { max-width: 1080px; margin: 0 auto; padding: 28px 20px 40px; }
+.hero { text-align: center; padding: 26px 0 8px; }
+.wordmark {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 44px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-indent: 0.35em;
+  text-shadow: 0 0 24px rgba(212, 175, 55, 0.35);
+}
+.tagline { color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; font-size: 12px; margin-top: 6px; }
+.clock { font-family: Georgia, serif; font-size: 30px; color: var(--white); margin-top: 14px; }
+.session { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+}
+.card {
+  background: rgba(17, 21, 27, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.card h2 { margin: 0 0 8px; font-size: 15px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.card h3 { margin: 14px 0 6px; font-size: 13px; color: var(--gold); }
+.muted { color: var(--muted); }
+.fineprint { color: var(--muted); font-size: 12.5px; margin: 12px 0 0; }
+.downloads { grid-row: span 2; }
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 6px 8px 0 0;
+}
+.btn.gold { background: var(--gold); color: #0b0f14; }
+.btn.ghost { border: 1px solid var(--gold-dim); color: var(--gold); }
+
+.dl-status { margin-top: 6px; }
+.dl-line { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--line); }
+.dl-line:first-child { border-top: none; }
+.dot { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: var(--muted); }
+.dot.ok { background: var(--ok); }
+.dot.warn { background: var(--warn); }
+.dot.busy { background: var(--busy); animation: pulse 1.2s infinite; }
+.dot.idle { background: #5a5f68; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.done-list { list-style: none; margin: 0; padding: 0; }
+.done-list li {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 6px 0; border-top: 1px solid var(--line); font-size: 13.5px;
+  overflow-wrap: anywhere;
+}
+.link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.link-grid a {
+  display: block; padding: 10px 12px; border: 1px solid var(--line);
+  border-radius: 8px; color: var(--white); text-decoration: none; background: var(--panel-2);
+}
+.link-grid a:hover { border-color: var(--gold); color: var(--gold); }
+.pill {
+  font-size: 11px; color: var(--black); background: var(--gold);
+  border-radius: 20px; padding: 2px 8px; vertical-align: 2px; letter-spacing: 0;
+  text-transform: none;
+}
+.mini-list { list-style: none; margin: 0; padding: 0; }
+.mini-list li {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 7px 0; border-top: 1px solid var(--line); font-size: 13.5px;
+}
+.mini-list code { color: var(--gold); font-size: 12px; overflow-wrap: anywhere; }
+.tips ul, .limits ul { margin: 4px 0 0; padding-left: 18px; }
+.tips li, .limits li { margin: 6px 0; }
+kbd {
+  background: var(--panel-2); border: 1px solid var(--line); border-bottom-width: 2px;
+  border-radius: 5px; padding: 1px 6px; font-family: inherit; font-size: 12.5px;
+}
+footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .wordmark { font-size: 30px; }
+  .downloads { grid-row: auto; }
+}

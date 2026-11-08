@@ -1,0 +1,109 @@
+# GigaBrowse v2 — KasmVNC server config.
+#
+# Every key here is from the KasmVNC configuration reference / defaults
+# (kasmtech/KasmVNC unix/kasmvnc_defaults.yaml, fetched Nov 8, 2026).
+# Nothing is guessed.
+#
+# Design choices:
+# - Fixed 1280x720 landscape desktop, client resize OFF: on an iPhone in
+#   portrait, client-driven resize would reshape the desktop tall and narrow
+#   and recreate the scrollbar problem. The client scales the fixed desktop
+#   to fit (Local Scaling) — the whole desktop is always visible.
+# - 1280x720 (not 1080p): at phone scale it is already retina-sharp, and it
+#   keeps the stream light and smooth. Set RESOLUTION=1920x1080 in
+#   devcontainer.json for a sharper Mac/iPad desktop (costs bandwidth).
+# - Native touch on, absolute mouse (game_mode off): tap = click where touched.
+# - Encoding tuned for a browser (lots of scrolling, mostly static pages):
+#   60 fps cap, scroll-region detection ON (default off), WebP/JPEG auto
+#   quality, progressive bilinear scaling.
+# - Clipboard both ways, unlimited size.
+# - VNC websocket is loopback-only (127.0.0.1); NGINX terminates TLS on
+#   :3001 and proxies to it. No auto-shutdown — Codespaces' own idle
+#   timeout (30 min) is the stop mechanism.
+desktop:
+  resolution:
+    width: 1280
+    height: 720
+  allow_resize: false
+  pixel_depth: 24
+  gpu:
+    hw3d: false
+    drinode: /dev/dri/renderD128
+max_resolution:
+  width: 1920
+  height: 1080
+pointer:
+  enabled: true
+  game_mode: false
+  touch_support: true
+keyboard:
+  enabled: true
+  remap_keys: {}
+  ignore_numlock: false
+  raw_keyboard: false
+network:
+  protocol: http
+  interface: 127.0.0.1
+  websocket_port: auto
+  use_ipv4: true
+  use_ipv6: true
+  ssl:
+    require_ssl: false
+runtime_configuration:
+  allow_client_to_override_kasm_server_settings: true
+  allow_override_standard_vnc_server_settings: true
+  allow_override_list:
+    - pointer.enabled
+    - data_loss_prevention.clipboard.server_to_client.enabled
+    - data_loss_prevention.clipboard.client_to_server.enabled
+    - data_loss_prevention.clipboard.server_to_client.primary_clipboard_enabled
+encoding:
+  max_frame_rate: 60
+  full_frame_updates: none
+  rect_encoding_mode:
+    min_quality: 7
+    max_quality: 8
+    consider_lossless_quality: 10
+    rectangle_compress_threads: auto
+  video_encoding_mode:
+    jpeg_quality: -1
+    webp_quality: -1
+    max_resolution:
+      width: 1920
+      height: 1080
+    enter_video_encoding_mode:
+      time_threshold: 5
+      area_threshold: 45%
+    exit_video_encoding_mode:
+      time_threshold: 3
+    scaling_algorithm: progressive_bilinear
+    webp_encoding_time: 30
+  video_streaming_mode:
+    codec: auto
+  compare_framebuffer: auto
+  zrle_zlib_level: auto
+  hextile_improved_compression: true
+  scrolling:
+    detect_vertical_scrolling: true
+    detect_horizontal_scrolling: false
+    scroll_detect_threshold: 25%
+data_loss_prevention:
+  clipboard:
+    server_to_client:
+      enabled: true
+      size: unlimited
+      primary_clipboard_enabled: false
+    client_to_server:
+      enabled: true
+      size: unlimited
+security:
+  brute_force_protection:
+    blacklist_threshold: 5
+    blacklist_timeout: 10
+user_session:
+  idle_timeout: never
+server:
+  auto_shutdown:
+    no_user_session_timeout: never
+    active_user_session_timeout: never
+    inactive_user_session_timeout: never
