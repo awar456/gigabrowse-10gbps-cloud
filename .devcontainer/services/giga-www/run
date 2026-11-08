@@ -1,5 +1,7 @@
-#!/command/with-contenv bash
+#!/usr/bin/with-contenv bash
 # GigaBrowse v2 — start-page HTTP server (s6 service).
 # Serves /config/www (index.html, style.css, wallpaper.jpg, status.json)
-# on 127.0.0.1:8080. Chrome opens http://localhost:8080/ at startup.
+# on 0.0.0.0:8080. Chrome opens http://localhost:8080/ at startup.
+# NOTE: bind 0.0.0.0, not 127.0.0.1 — the Codespaces tunnel connects via
+# the container IP, so a loopback-only bind is unreachable from it.
 exec python3 -m http.server 8080 --directory /config/www --bind 0.0.0.0

@@ -68,16 +68,31 @@ COPY 01-kasmvnc-config.sh /custom-cont-init.d/01-kasmvnc-config.sh
 COPY 02-rclone-config.sh /custom-cont-init.d/02-rclone-config.sh
 COPY 03-giga-theme.sh /custom-cont-init.d/03-giga-theme.sh
 
-# Supervised services (s6): start-page server + download watcher.
-COPY services/giga-www/run /custom-services.d/giga-www/run
-COPY services/giga-downloads/run /custom-services.d/giga-downloads/run
+# Supervised services (s6-rc longrun services): start-page server +
+# download watcher. NOTE: this base image does NOT process
+# /custom-services.d/ (verified Nov 8, 2026 — no script in the image
+# references it and s6-rc lists no giga-* service), so the services are
+# registered in the s6-rc database directly, in the exact format of the
+# image's own svc-kasmvnc service (type=longrun, run with
+# #!/usr/bin/with-contenv bash, dependencies.d/init-services, and a
+# member file in the user bundle's contents.d).
+COPY services/giga-www/run /etc/s6-overlay/s6-rc.d/giga-www/run
+COPY services/giga-downloads/run /etc/s6-overlay/s6-rc.d/giga-downloads/run
 COPY download-watch.sh /usr/local/bin/giga-download-watch.sh
 COPY giga-status.py /usr/local/bin/giga-status.py
 
 RUN chmod +x /custom-cont-init.d/*.sh \
-      /custom-services.d/giga-www/run \
-      /custom-services.d/giga-downloads/run \
+      /etc/s6-overlay/s6-rc.d/giga-www/run \
+      /etc/s6-overlay/s6-rc.d/giga-downloads/run \
       /usr/local/bin/giga-download-watch.sh \
       /usr/local/bin/giga-status.py \
  && base64 -d /usr/share/gigabrowse/wallpaper.jpg.b64 > /usr/share/gigabrowse/wallpaper.jpg \
- && rm /usr/share/gigabrowse/wallpaper.jpg.b64
+ && rm /usr/share/gigabrowse/wallpaper.jpg.b64 \
+ && mkdir -p /etc/s6-overlay/s6-rc.d/giga-www/dependencies.d \
+      /etc/s6-overlay/s6-rc.d/giga-downloads/dependencies.d \
+ && printf 'longrun\n' > /etc/s6-overlay/s6-rc.d/giga-www/type \
+ && printf 'longrun\n' > /etc/s6-overlay/s6-rc.d/giga-downloads/type \
+ && touch /etc/s6-overlay/s6-rc.d/giga-www/dependencies.d/init-services \
+ && touch /etc/s6-overlay/s6-rc.d/giga-downloads/dependencies.d/init-services \
+ && touch /etc/s6-overlay/s6-rc.d/user/contents.d/giga-www \
+ && touch /etc/s6-overlay/s6-rc.d/user/contents.d/giga-downloads

@@ -1,4 +1,4 @@
-#!/command/with-contenv bash
+#!/usr/bin/with-contenv bash
 # GigaBrowse v2 — download watcher (s6 service, supervised + auto-restarted).
 # Watches /config/Downloads and moves finished files to Google Drive.
 exec /usr/local/bin/giga-download-watch.sh
